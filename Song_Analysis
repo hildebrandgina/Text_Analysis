@@ -1,0 +1,16 @@
+%pip install pandas
+
+import nltk
+import pandas
+
+df = pandas.read_csv('Song_Data.csv', index_col='Record ID')
+
+import csv
+df['Words'] = df['Lyrics']
+df['Words'] = df['Words'].str.split()
+Exploded = df.explode('Words')
+print(Exploded)
+
+#Export to file
+df.to_csv('song_data_for_tableau.csv')
+Exploded.to_csv('explode.csv')
