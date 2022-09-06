@@ -3,14 +3,27 @@
 import nltk
 import pandas
 
-df = pandas.read_csv('Song_Data.csv', index_col='Record ID')
+df = pandas.read_csv('Song_Data.csv')
 
+#replace carriage returns with spaces
+df['Lyrics'] = df['Lyrics'].replace('\n', ' ')
+
+#change all letters to lowercase
+df['Lyrics'] = df['Lyrics'].str.lower()
+
+#replace punctuation with spaces except apostrophes
+df['Lyrics'] = df['Lyrics'].str.replace('[^\w\s\']',' ')
+
+#Explode each word to its own row
 import csv
 df['Words'] = df['Lyrics']
 df['Words'] = df['Words'].str.split()
-Exploded = df.explode('Words')
-print(Exploded)
+exploded = df.explode('Words')
+print(exploded)
+
+import numpy as np
+exploded['Record ID'] = np.arange(len(exploded))
 
 #Export to file
-df.to_csv('song_data_for_tableau.csv')
-Exploded.to_csv('explode.csv')
+exploded.to_csv('song_data_for_tableau.csv')
+#exploded.to_csv('explode.csv')
