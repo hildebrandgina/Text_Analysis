@@ -23,18 +23,12 @@ df['Words'] = df['Lyrics']
 df['Words'] = df['Words'].str.split()
 exploded = df.explode('Words')
 
-# Get the word's sentiment score.
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
-nltkSentiment = SentimentIntensityAnalyzer()
-score = nltkSentiment.polarity_scores(str(exploded))
-compoundScore = score['compound']
-print(compoundScore)
-
+#Identify stopwords
 from nltk.corpus import stopwords
 is_stopword = stopwords.words('english')
 exploded['stopword'] = exploded.apply(lambda x: x['Words'] in is_stopword, axis=1)
-print(exploded['stopword'])
 
+#Add unique Record ID for each row
 import numpy as np
 exploded['Record ID'] = np.arange(len(exploded))
 
